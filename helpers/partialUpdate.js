@@ -1,3 +1,5 @@
+
+
 /**
  * Generate a selective update query based on a request body:
  *
@@ -23,7 +25,7 @@ function sqlForPartialUpdate(table, items, key, id) {
   for (let key in items) {
     if (key.startsWith("_")) {
       delete items[key];
-    }
+    }``
   }
 
   for (let column in items) {
