@@ -9,25 +9,22 @@ const patchCompanySchema = require("../schemas/patchCompanySchema")
 const postCompanySchema = require("../schemas/postCompanySchema")
 
 
-
+/** GET companies by search terms */
 router.get("/", async function (req, res, next) {
   let searchName = req.query.searchName;
   let minEmployees = (req.query.minEmployees);
   let maxEmployees = (req.query.maxEmployees);
   try {
-  
     if (minEmployees < maxEmployees || minEmployees === undefined || maxEmployees === undefined || searchName === undefined) {
       let companies = await Company.search(searchName, minEmployees, maxEmployees)
-  
+
       if (companies.length !== 0){
-          
             return res.json({ companies })
-          }
-          throw new ExpressError("Params are not valid", 400);
-        }
-     
-    
-   throw new ExpressError("Params are not valid", 400);
+      }
+      throw new ExpressError("Params are not valid", 400);
+    }
+          
+    throw new ExpressError("Params are not valid", 400);
   } catch (err) {
     return next(err)
   }
@@ -42,8 +39,9 @@ router.post("/", async function (req, res, next) {
 
     if (!result.valid) {
       let listOfErrors = result.errors.map(error => error.stack)
-      let err = new ExpressError(listOfErrors, 400)
-      return next(err)
+      throw new ExpressError(listOfErrors, 400)
+      
+      // return next(err)
     }
 
     let companies = await Company.create(req.body);
@@ -58,6 +56,7 @@ router.get("/:handle", async function (req, res, next) {
   let handle = req.params.handle;
   try {
     let company = await Company.get(handle);
+
     if (company) {
       return res.json({ company })
     }
@@ -70,7 +69,7 @@ router.get("/:handle", async function (req, res, next) {
 })
 
 
-
+/**PATCH, update company routes by handle */
 router.patch("/:handle", async function (req, res, next) {
   let handle = req.params.handle;
   let items = req.body.items
@@ -84,6 +83,7 @@ router.patch("/:handle", async function (req, res, next) {
 
       let listOfErrors = validateResult.errors.map(error => error.stack);
       let err = new ExpressError(listOfErrors, 400);
+      // FIXME: jsut throw this
       return next(err)
 
     }
@@ -116,11 +116,4 @@ router.delete("/:handle", async function (req, res, next) {
 
 
 
-
-
-
-
-
-
-
-module.exports = router;
+module.exports = router; 
