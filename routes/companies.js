@@ -8,18 +8,26 @@ const jsonschema = require("jsonschema");
 const patchCompanySchema = require("../schemas/patchCompanySchema")
 const postCompanySchema = require("../schemas/postCompanySchema")
 
-/**GET/companies, return  JSON of {companies: [companyData, ...]}  */
+
+
 router.get("/", async function (req, res, next) {
   let searchName = req.query.searchName;
   let minEmployees = (req.query.minEmployees);
   let maxEmployees = (req.query.maxEmployees);
   try {
-    if ((minEmployees < maxEmployees) && (minEmployees === undefined || maxEmployees === undefined || searchName === undefined)) {
-
+  
+    if (minEmployees < maxEmployees || minEmployees === undefined || maxEmployees === undefined || searchName === undefined) {
       let companies = await Company.search(searchName, minEmployees, maxEmployees)
-      return res.json({ companies })
-    }
-    throw new ExpressError("Params are not valid", 400);
+  
+      if (companies.length !== 0){
+          
+            return res.json({ companies })
+          }
+          throw new ExpressError("Params are not valid", 400);
+        }
+     
+    
+   throw new ExpressError("Params are not valid", 400);
   } catch (err) {
     return next(err)
   }

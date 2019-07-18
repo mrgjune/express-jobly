@@ -8,23 +8,22 @@ class Company {
                 RETURNING handle, name, num_employees, description, logo_url`,
             [handle, name, num_employees, description, logo_url]
         );
+
         return result.rows[0]
     }
     /**takes in a search term and returns the companies with that search term */
     static async search(searchTerm, minEmployees = 0, maxEmployees = 1000000) {
-        if (searchTerm !== undefined) {
-            searchTerm = `%${searchTerm}%`;
-        }
 
         let result;
         if (searchTerm === undefined) {
             result = await db.query(
-                `SELECT handle, name
+            `SELECT handle, name
             FROM companies
             WHERE num_employees >= $1
             AND num_employees <= $2`,
                 [minEmployees, maxEmployees])
         } else {
+            searchTerm = `%${searchTerm}%`;
             result = await db.query(
                 `SELECT handle, name
                 FROM companies
@@ -35,24 +34,21 @@ class Company {
             )
         }
 
+        return result.rows;
 
-        if (!result) {
-            throw err;
-        } else {
-            return result.rows;
-        }
     }
+
     static async get(handle) {
-            let result = await db.query(
-                `SELECT handle, name, num_employees, description, logo_url
+        let result = await db.query(
+            `SELECT handle, name, num_employees, description, logo_url
                 FROM companies
                 WHERE handle = $1`,
-                [handle]
-            )
-            return result.rows[0];
+            [handle]
+        )
+        return result.rows[0];
     }
 
-    
+
 
 
 }
