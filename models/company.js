@@ -15,7 +15,6 @@ class Company {
         if (searchTerm !== undefined) {
             searchTerm = `%${searchTerm}%`; 
         }
-        console.log("SEARCHTERM:", searchTerm)
    
         let result;
         if (searchTerm === undefined){
@@ -25,7 +24,6 @@ class Company {
             WHERE num_employees >= $1
             AND num_employees <= $2`,
             [minEmployees,maxEmployees])
-            console.log("LOOOOOOOOOOOOOOK", typeof maxEmployees)
         } else {
             result = await db.query(
             `SELECT handle, name
@@ -34,8 +32,6 @@ class Company {
             AND num_employees >= $2
             AND num_employees <= $3`,
             [searchTerm,minEmployees,maxEmployees])
-            console.log("searchTerm:", searchTerm, "min:", minEmployees, "max:", maxEmployees)
-            console.log("RESULT:", result)
             }
 
             
