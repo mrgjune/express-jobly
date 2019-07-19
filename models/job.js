@@ -9,6 +9,7 @@ class Job {
         RETURNING id, title, salary, equity, company_handle, date_posted`,
       [title, salary, equity, company_handle]
     );
+
     return result.rows[0]
   }
 
@@ -72,7 +73,6 @@ class Job {
             WHERE j.company_handle = $1`,
         [handle]
     )
-    console.log("GETJOB RESULTS:", result.rows)
     return result.rows;
   }
 }

@@ -46,7 +46,6 @@ class Company {
                 WHERE handle = $1`,
             [handle]
         )
-        console.log("GETCOMPANY RESULTS:", result.rows[0])
         return result.rows[0];
     }
 

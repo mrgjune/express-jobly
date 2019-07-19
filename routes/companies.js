@@ -58,7 +58,6 @@ router.get("/:handle", async function (req, res, next) {
   try {
     let company = await Company.getCompany(handle);
     let jobs = await Job.getJobs(handle);
-
     if (company) {
       company["jobs"] = jobs
       return res.json({ company, jobs })
