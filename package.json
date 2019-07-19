@@ -1,7 +1,6 @@
 {
   "name": "express-jobly",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -17,6 +16,16 @@
     "jsonschema": "^1.2.4",
     "morgan": "^1.9.1",
     "pg": "^7.11.0",
+    "pq": "0.0.3",
     "supertest": "^4.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvatanya/Jobly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mvatanya/Jobly/issues"
+  },
+  "homepage": "https://github.com/mvatanya/Jobly#readme",
+  "description": ""
 }

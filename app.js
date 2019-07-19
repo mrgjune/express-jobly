@@ -19,7 +19,10 @@ app.use(express.json());
 
 //routes
 const companyRoutes = require("./routes/companies");
+const jobRoutes = require("./routes/jobs");
+
 app.use("/companies", companyRoutes);
+app.use("/jobs", jobRoutes)
 
 /** 404 handler */
 

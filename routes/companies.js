@@ -1,6 +1,7 @@
 const express = require("express");
 const router = new express.Router();
 const Company = require("../models/company")
+const Job = require("../models/job")
 const ExpressError = require("../helpers/expressError")
 const sqlForPartialUpdate = require("../helpers/partialUpdate")
 const db = require("../db")
@@ -12,8 +13,8 @@ const postCompanySchema = require("../schemas/postCompanySchema")
 /** GET companies by search terms */
 router.get("/", async function (req, res, next) {
   let searchName = req.query.searchName;
-  let minEmployees = (req.query.minEmployees);
-  let maxEmployees = (req.query.maxEmployees);
+  let minEmployees = req.query.minEmployees;
+  let maxEmployees = req.query.maxEmployees;
   try {
     if (minEmployees < maxEmployees || minEmployees === undefined || maxEmployees === undefined || searchName === undefined) {
       let companies = await Company.search(searchName, minEmployees, maxEmployees)
@@ -31,7 +32,7 @@ router.get("/", async function (req, res, next) {
 
 })
 
-/**POST/companies, return JSON of {company: companyData} */
+/** POST/companies, return JSON of {company: companyData} */
 router.post("/", async function (req, res, next) {
 
   try {
@@ -51,14 +52,16 @@ router.post("/", async function (req, res, next) {
   }
 })
 
-/**GET/companies/[handle], return JSON of {company: companyData} */
+/** GET/companies/[handle], return JSON of {company: {...companyData, jobs: [job, ...]}} */
 router.get("/:handle", async function (req, res, next) {
   let handle = req.params.handle;
   try {
-    let company = await Company.get(handle);
+    let company = await Company.getCompany(handle);
+    let jobs = await Job.getJobs(handle);
 
     if (company) {
-      return res.json({ company })
+      company["jobs"] = jobs
+      return res.json({ company, jobs })
     }
     throw new ExpressError("Company Not Found", 404);
 
@@ -69,7 +72,7 @@ router.get("/:handle", async function (req, res, next) {
 })
 
 
-/**PATCH, update company routes by handle */
+/** PATCH/companies/[id], update company routes by handle, should return JSON of {company: companyData} */
 router.patch("/:handle", async function (req, res, next) {
   let handle = req.params.handle;
   let items = req.body.items
@@ -82,9 +85,7 @@ router.patch("/:handle", async function (req, res, next) {
     if (!validateResult.valid) {
 
       let listOfErrors = validateResult.errors.map(error => error.stack);
-      let err = new ExpressError(listOfErrors, 400);
-      // FIXME: jsut throw this
-      return next(err)
+      throw new ExpressError(listOfErrors, 400);
 
     }
     const result = await db.query(updateCompany.query, updateCompany.values)
@@ -99,7 +100,7 @@ router.patch("/:handle", async function (req, res, next) {
   }
 })
 
-/**DELETE/companies/[handle], return JSON of {message: "Company deleted"} */
+/** DELETE/companies/[handle], return JSON of {message: "Company deleted"} */
 router.delete("/:handle", async function (req, res, next) {
   let handle = req.params.handle;
   try {

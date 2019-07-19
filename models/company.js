@@ -1,4 +1,5 @@
 const db = require("../db");
+
 class Company {
     /**insert a company in companies database */
     static async create({ handle, name, num_employees, description, logo_url }) {
@@ -38,13 +39,14 @@ class Company {
 
     }
 
-    static async get(handle) {
+    static async getCompany(handle) {
         let result = await db.query(
             `SELECT handle, name, num_employees, description, logo_url
                 FROM companies
                 WHERE handle = $1`,
             [handle]
         )
+        console.log("GETCOMPANY RESULTS:", result.rows[0])
         return result.rows[0];
     }
 
