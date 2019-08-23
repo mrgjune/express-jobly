@@ -1,0 +1,91 @@
+// describe("PATCH /jobs/:id", async function () {
+  // async function addToDatabase () {
+  //   await Company.create({
+  //     handle: "testHandle",
+  //     name: "testName",
+  //     num_employees: 10,
+  //     description: "This is our test",
+  //     logo_url: "https://www.google.com/"
+  //   });
+  
+  //   await Job.create({
+  //     title: "engineer_test2",
+  //     salary: 1000,
+  //     equity: 0.5,
+  //     company_handle: "testHandle"
+  //   })
+    
+  // }
+  // addToDatabase();
+  
+  
+//   test("Updates a single a job's title", async function () {
+//     const response = await request(app)
+//         .patch(`/jobs/engineer_test2}`)
+//         .send({title: "updated Title"});
+     
+//     //expect(response.body.job.title).toBe("updated Title");
+      
+//     console.log(response.body.job.title,"TITLEEEEEE")
+//   });
+
+//   test("Updates a single a job's equity", async function () {
+//     const response = await request(app)
+//         .patch(`/jobs/engineer_test1`)
+//         .send({
+//           _token: TEST_DATA.userToken, equity: 0.5
+//         });
+//     expect(response.body.job).toHaveProperty("id");
+//   });
+
+//   test("Prevents a bad job update", async function () {
+//     const response = await request(app)
+//         .patch(`/jobs/${TEST_DATA.jobId}`)
+//         .send({
+//           _token: TEST_DATA.userToken, cactus: false
+//         });
+//     expect(response.statusCode).toBe(400);
+//   });
+
+//   test("Responds with a 404 if it cannot find the job in question", async function () {
+//     // delete job first
+//     await request(app)
+//         .delete(`/jobs/${TEST_DATA.jobId}`).send({
+//           _token: TEST_DATA.userToken, title: "instructor"
+//         });
+//     const response = await request(app)
+//         .patch(`/jobs/${TEST_DATA.jobId}`)
+//         .send({
+//           _token: TEST_DATA.userToken, title: "instructor"
+//         });
+//     expect(response.statusCode).toBe(404);
+//   // });
+// });
+//             test("It should return 404 for no-such-comp", async function () {
+//                 const response = await request(app)
+//                     .patch("/companies/blargh")
+//                     .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });;
+//                 expect(response.statusCode).toEqual(404);
+  
+//             });
+        
+
+
+
+  //     describe("DELETE /handle", function () {
+
+  //         test("It should delete company", async function () {
+  //             const response = await request(app)
+  //                 .delete("/companies/testHandle");
+
+  //             expect(response.body).toEqual({ "message": "Company deleted" });
+  //         });
+
+  //         test("It should return 404 for no-such-comp", async function () {
+  //             const response = await request(app)
+  //                 .delete("/companies/blargh");
+
+  //             expect(response.statusCode).toEqual(404);
+  //         });
+  //     });
+

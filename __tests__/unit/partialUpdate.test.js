@@ -29,11 +29,11 @@ describe("partialUpdate()", function (){
       {name:"testUpdated",num_employees:20},
       "handle",
       "testHandle")
-    console.log("RESULT:", result)
+   
     let expectResult = { query:
       'UPDATE companies SET name=$1, num_employees=$2 WHERE handle=$3 RETURNING *',
      values: [ 'testUpdated', 20, 'testHandle' ] }
-    console.log("EXPECTED:", expectResult)
+    
     expect(result).toEqual(expectResult)
   });
 

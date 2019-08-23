@@ -1,7 +1,7 @@
 
-DROP DATABASE IF EXISTS "jobly";
-CREATE DATABASE "jobly";
-\c "jobly"
+-- DROP DATABASE IF EXISTS "jobly";
+-- CREATE DATABASE "jobly";
+-- \c "jobly"
 
 CREATE TABLE companies(
     handle TEXT PRIMARY KEY,
@@ -26,7 +26,9 @@ CREATE TABLE jobs(
     title TEXT NOT NULL,
     salary FLOAT,
     equity FLOAT CHECK(equity <= 1.0),
-    company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE
+    company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE,
+    date_posted timestamp NOT NULL DEFAULT NOW()
+
 );
 
 CREATE TABLE applications(
@@ -36,25 +38,25 @@ CREATE TABLE applications(
     created_at TIMESTAMP DEFAULT current_timestamp,
     PRIMARY KEY(username, job_id)
 );
-INSERT INTO companies (handle, name, num_employees, description, logo) VALUES
-  (testHanlde, testName, 20, "testing company","http://google.com"),
-  (apple, apple, 10000, "a big company","http://google.com")
+INSERT INTO companies (handle, name, num_employees, description, logo_url) VALUES
+  ('testHandle', 'testName', 20, 'testing company','http://google.com'),
+  ('apple', 'apple', 10000, 'a big company','http://google.com');
 
 
 INSERT INTO users (username, password, first_name, last_name, email, photo_url) VALUES
-(mcTestUsername, test1234, test, testLastName, test@test.com, "http:google.com")
+('mcTestUsername', 'test1234', 'test', 'testLastName', 'test@test.com', 'http:google.com');
   
 INSERT INTO jobs (title, salary, equity, company_handle) VALUES 
-(ceo, 1000000, .3, testHandle)
+('ceo', 1000000, 0.3, 'testHandle')
 
 
 
 
 -- Create test database with tables
 
-DROP DATABASE IF EXISTS "jobly-test";
-CREATE DATABASE "jobly-test";
-\c "jobly-test"
+-- DROP DATABASE IF EXISTS "jobly-test";
+-- CREATE DATABASE "jobly-test";
+-- \c "jobly-test"
 
 
 CREATE TABLE companies(
@@ -80,13 +82,14 @@ CREATE TABLE jobs(
     title TEXT NOT NULL,
     salary FLOAT,
     equity FLOAT CHECK(equity <= 1.0),
-    company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE
+    company_handle TEXT NOT NULL REFERENCES companies ON DELETE CASCADE,
+    date_posted timestamp NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE applications(
-    username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
-    job_id INTEGER  REFERENCES jobs ON DELETE CASCADE,
-    state TEXT,
-    created_at TIMESTAMP DEFAULT current_timestamp,
-    PRIMARY KEY(username, job_id)
-);
+-- CREATE TABLE applications(
+--     username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
+--     job_id INTEGER  REFERENCES jobs ON DELETE CASCADE,
+--     state TEXT,
+--     created_at TIMESTAMP DEFAULT current_timestamp,
+--     PRIMARY KEY(username, job_id)
+-- );
