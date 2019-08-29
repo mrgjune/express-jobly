@@ -1,6 +1,5 @@
 
-DROP TABLE IF EXISTS jobs;
-DROP TABLE IF EXISTS companies;
+
 CREATE TABLE companies (
     handle text PRIMARY KEY,
     name text not null,

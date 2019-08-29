@@ -8,13 +8,13 @@ const Job = require("../../../models/job");
 
 
 
-describe("routes for jobs", function () {
+describe("routes for jobs", async function () {
   id = null;
   date = null;
   beforeEach(async function () {
     await db.query("DELETE FROM jobs");
     await db.query("DELETE FROM companies");
-
+  
     await Company.create({
       handle: "testHandle",
       name: "testName",
@@ -50,6 +50,7 @@ describe("routes for jobs", function () {
   });
 
 
+
   describe("GET /:id", function () {
     ;
     test("It should respond with {jobs{ [job,...]}", async function () {
@@ -83,29 +84,34 @@ describe("routes for jobs", function () {
 
   describe("GET /query params", function () {
 
-    test("It should respond with {jobs: {job details...}} ", async function () {
-      const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
-      expect(response.body).toEqual({
-        "jobs":
-          [{
-            "company_handle": "testHandle",
-            "date_posted": JSON.parse(date),
-            "salary": 100,
-            "title": "engineer_test1"
-          }]
-      });
-    })
 
-    //         test("It should respond with {companies: handle and name}, testing without searchName ", async function () {
-    //             const response = await request(app).get("/companies?&minEmployees=3&maxEmployees=50");
-    //             expect(response.body).toEqual({
+    test("It should respond with {jobs: {job details...}} testing with all search params: searchName,min_salary,max_salary ",
+      async function () {
+        const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
+        expect(response.body).toEqual({
+          "jobs":
+            [{
+              "company_handle": "testHandle",
+              "date_posted": JSON.parse(date),
+              "salary": 100,
+              "title": "engineer_test1"
+            }]
+        });
+      })
 
-    //                 "companies": [{
-    //                     "handle": "testHandle",
-    //                     "name": "testName",
-    //                 }]
+    /**FIXME: fix the search  */
 
-    //             });
+    // test("It should respond with {jobs: {job details...}}, testing t ",
+    //   async function () {
+    //     const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
+    //     expect(response.body).toEqual({
+
+    //       "companies": [{
+    //         "handle": "testHandle",
+    //         "name": "testName",
+    //       }]
+
+    //     });
   });
 
   //         test("It should respond with {companies: handle and name}, testing when min > max ", async function () {
@@ -129,7 +135,6 @@ describe("routes for jobs", function () {
   //         })
 
 
-
   //         test("It should return 400 if params are not valid", async function () {
   //             const response = await request(app)
   //                 .get("/companies?searchName=test&minEmployees=50&maxEmployees=5/blargh");
@@ -140,53 +145,47 @@ describe("routes for jobs", function () {
   //     });
 
 
-  //     describe("POST /", function () {
+  describe("POST /", async function () {
+  
 
-  //         test("It should add company", async function () {
-  //             const response = await request(app)
-  //                 .post("/companies")
-  //                 .send({
-  //                     "handle": "addCompany",
-  //                     "name": "added",
-  //                     "num_employees": 100,
-  //                     "description": "This is our added test",
-  //                     "logo_url": "https://www.google.com/"
-  //                 });
+    test("It should add a job", async function () {
 
-  //             expect(response.body).toEqual(
-  //                 {
-  //                     "companies": {
-  //                         "handle": "addCompany",
-  //                         "name": "added",
-  //                         "num_employees": 100,
-  //                         "description": "This is our added test",
-  //                         "logo_url": "https://www.google.com/"
-  //                     }
-  //                 }
-  //             );
-  //         });
-  //     });
+      
+      const response = await request(app)
+        .post("/jobs")
+        .send({
+          "title": "testing app",
+          "salary": 200,
+          "equity": 0.4,
+          "company_handle": "testHandle"
+        });
 
-  //     describe("PATCH /:handle", function () {
+  
+        expect(response.statusCode).toBe(200);
 
-  //         test("It should update company", async function () {
-  //             const response = await request(app)
-  //                 .patch("/companies/testHandle")
-  //                 .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });
+    });
+  });
 
-  //             expect(response.body).toEqual(
-  //                 {
-  //                     "company": {
-  //                         "handle": "testHandle",
-  //                         "name": "testyPATCH",
-  //                         "num_employees": 10,
-  //                         "description": "NewDescrip",
-  //                         "logo_url": "https://www.google.com/"
-  //                     }
-  //                 }
+      describe("PATCH /:handle", function () {
 
-  //             );
-  //         });
+          test("It should update jo", async function () {
+              const response = await request(app)
+                  .patch("/companies/testHandle")
+                  .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });
+
+              expect(response.body).toEqual(
+                  {
+                      "company": {
+                          "handle": "testHandle",
+                          "name": "testyPATCH",
+                          "num_employees": 10,
+                          "description": "NewDescrip",
+                          "logo_url": "https://www.google.com/"
+                      }
+                  }
+
+              );
+          });
   //         test("It should return 404 for no-such-comp", async function () {
   //             const response = await request(app)
   //                 .patch("/companies/blargh")
@@ -218,5 +217,6 @@ describe("routes for jobs", function () {
   afterAll(async function () {
     await db.end()
   })
+
 
 });
