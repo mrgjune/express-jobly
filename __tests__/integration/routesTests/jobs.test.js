@@ -11,7 +11,7 @@ const Job = require("../../../models/job");
 describe("routes for jobs", async function () {
   id = null;
   date = null;
-  beforeEach(async function () {
+  beforeAll(async function () {
     await db.query("DELETE FROM jobs");
     await db.query("DELETE FROM companies");
   
@@ -23,7 +23,7 @@ describe("routes for jobs", async function () {
       logo_url: "https://www.google.com/"
 
 
-    })
+    });
     let response = await Job.create({
       title: "engineer_test1",
       salary: 100,
@@ -31,8 +31,6 @@ describe("routes for jobs", async function () {
       company_handle: "testHandle"
     })
 
-    id = response.id;
-    date = JSON.stringify(response.date_posted);
 
 
     await Job.create({
@@ -47,6 +45,8 @@ describe("routes for jobs", async function () {
       equity: 0.7,
       company_handle: "testHandle"
     })
+    id = response.id;
+    date = JSON.stringify(response.date_posted);
   });
 
 
@@ -84,6 +84,7 @@ describe("routes for jobs", async function () {
 
   describe("GET /query params", function () {
 
+<<<<<<< HEAD
 
     test("It should respond with {jobs: {job details...}} testing with all search params: searchName,min_salary,max_salary ",
       async function () {
@@ -151,6 +152,41 @@ describe("routes for jobs", async function () {
     test("It should add a job", async function () {
 
       
+=======
+
+    test("It should respond with {jobs: {job details...}} testing with all search params: searchName,min_salary,max_salary ",
+      async function () {
+        const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
+        expect(response.body).toEqual({
+          "jobs":
+            [{
+              "company_handle": "testHandle",
+              "date_posted": JSON.parse(date),
+              "salary": 100,
+              "title": "engineer_test1"
+            }]
+        });
+      });
+  
+
+  test("It should respond with {jobs: {job details...}}, testing it only returns salarys between 3 and 5 ",
+    async function () {
+      const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
+   expect(response.body).toEqual({
+     jobs:
+      [ { title: 'engineer_test1',
+          company_handle: 'testHandle',
+          "date_posted": JSON.parse(date),
+              "salary": 100,
+              "title": "engineer_test1"} ] }
+  );
+});
+  });
+
+  
+  describe("POST /", async function () {
+    test("It should add a job", async function () {
+>>>>>>> refs/remotes/origin/master
       const response = await request(app)
         .post("/jobs")
         .send({
@@ -159,6 +195,7 @@ describe("routes for jobs", async function () {
           "equity": 0.4,
           "company_handle": "testHandle"
         });
+<<<<<<< HEAD
 
   
         expect(response.statusCode).toBe(200);
@@ -211,12 +248,33 @@ describe("routes for jobs", async function () {
   //             expect(response.statusCode).toEqual(404);
   //         });
   //     });
+=======
+        expect(response.statusCode).toBe(200);
+        expect(response.body.job).toHaveProperty("id");
+    });
+>>>>>>> refs/remotes/origin/master
 
+    test("It should return a 500 error if the company handle does not exist", async function () {
+      const response = await request(app)
+        .post("/jobs")
+        .send({
+          "title": "newValue",
+          "salary": 200,
+          "equity": 0.4,
+          "company_handle": ""
+        });
+        expect(response.statusCode).toBe(500);
+        
+    });
+  });
 
 
   afterAll(async function () {
+    await db.query("DELETE FROM jobs");
+    await db.query("DELETE FROM companies");
     await db.end()
   })
 
 
 });
+

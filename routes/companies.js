@@ -18,7 +18,7 @@ router.get("/", async function (req, res, next) {
   try {
     if (minEmployees < maxEmployees || minEmployees === undefined || maxEmployees === undefined || searchName === undefined) {
       let companies = await Company.search(searchName, minEmployees, maxEmployees)
-
+     
       if (companies.length !== 0){
             return res.json({ companies })
       }

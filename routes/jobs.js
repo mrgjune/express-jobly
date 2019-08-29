@@ -23,7 +23,7 @@ router.post("/", async function (req, res, next) {
       throw new ExpressError("Equity value should be less than 1", 400);
       
     }
-    console.log("HIT HERE")
+
     let job = await Job.create(req.body);
     
     return res.json({ job })
