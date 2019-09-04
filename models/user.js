@@ -51,7 +51,6 @@ class User {
 
 
 
-
   /** Delete given user from database; returns undefined. */
 
   static async remove(username) {

@@ -84,7 +84,6 @@ describe("routes for jobs", async function () {
 
   describe("GET /query params", function () {
 
-<<<<<<< HEAD
 
     test("It should respond with {jobs: {job details...}} testing with all search params: searchName,min_salary,max_salary ",
       async function () {
@@ -152,7 +151,6 @@ describe("routes for jobs", async function () {
     test("It should add a job", async function () {
 
       
-=======
 
     test("It should respond with {jobs: {job details...}} testing with all search params: searchName,min_salary,max_salary ",
       async function () {
@@ -186,7 +184,6 @@ describe("routes for jobs", async function () {
   
   describe("POST /", async function () {
     test("It should add a job", async function () {
->>>>>>> refs/remotes/origin/master
       const response = await request(app)
         .post("/jobs")
         .send({
@@ -195,7 +192,6 @@ describe("routes for jobs", async function () {
           "equity": 0.4,
           "company_handle": "testHandle"
         });
-<<<<<<< HEAD
 
   
         expect(response.statusCode).toBe(200);
@@ -248,11 +244,6 @@ describe("routes for jobs", async function () {
   //             expect(response.statusCode).toEqual(404);
   //         });
   //     });
-=======
-        expect(response.statusCode).toBe(200);
-        expect(response.body.job).toHaveProperty("id");
-    });
->>>>>>> refs/remotes/origin/master
 
     test("It should return a 500 error if the company handle does not exist", async function () {
       const response = await request(app)
