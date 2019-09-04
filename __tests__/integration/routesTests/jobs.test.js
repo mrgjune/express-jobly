@@ -14,7 +14,7 @@ describe("routes for jobs", async function () {
   beforeAll(async function () {
     await db.query("DELETE FROM jobs");
     await db.query("DELETE FROM companies");
-  
+
     await Company.create({
       handle: "testHandle",
       name: "testName",
@@ -146,11 +146,8 @@ describe("routes for jobs", async function () {
 
 
   describe("POST /", async function () {
-  
 
-    test("It should add a job", async function () {
 
-      
 
     test("It should respond with {jobs: {job details...}} testing with all search params: searchName,min_salary,max_salary ",
       async function () {
@@ -165,23 +162,27 @@ describe("routes for jobs", async function () {
             }]
         });
       });
-  
 
-  test("It should respond with {jobs: {job details...}}, testing it only returns salarys between 3 and 5 ",
-    async function () {
-      const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
-   expect(response.body).toEqual({
-     jobs:
-      [ { title: 'engineer_test1',
-          company_handle: 'testHandle',
-          "date_posted": JSON.parse(date),
+
+    test("It should respond with {jobs: {job details...}}, testing it only returns salarys between 3 and 5 ",
+      async function () {
+        const response = await request(app).get("/jobs?SearchName=engineer&minSalary=3&maxSalary=500");
+        expect(response.body).toEqual({
+          jobs:
+            [{
+              title: 'engineer_test1',
+              company_handle: 'testHandle',
+              "date_posted": JSON.parse(date),
               "salary": 100,
-              "title": "engineer_test1"} ] }
-  );
-});
+              "title": "engineer_test1"
+            }]
+        }
+        );
+      });
   });
 
-  
+
+
   describe("POST /", async function () {
     test("It should add a job", async function () {
       const response = await request(app)
@@ -193,71 +194,43 @@ describe("routes for jobs", async function () {
           "company_handle": "testHandle"
         });
 
-  
-        expect(response.statusCode).toBe(200);
+
+      expect(response.statusCode).toBe(200);
 
     });
   });
 
-      describe("PATCH /:handle", function () {
 
-          test("It should update jo", async function () {
+      describe("DELETE /handle", function () {
+
+          test("It should delete company", async function () {
               const response = await request(app)
-                  .patch("/companies/testHandle")
-                  .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });
+                  .delete("/companies/testHandle");
 
-              expect(response.body).toEqual(
-                  {
-                      "company": {
-                          "handle": "testHandle",
-                          "name": "testyPATCH",
-                          "num_employees": 10,
-                          "description": "NewDescrip",
-                          "logo_url": "https://www.google.com/"
-                      }
-                  }
-
-              );
+              expect(response.body).toEqual({ "message": "Company deleted" });
           });
-  //         test("It should return 404 for no-such-comp", async function () {
-  //             const response = await request(app)
-  //                 .patch("/companies/blargh")
-  //                 .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });;
-  //             expect(response.statusCode).toEqual(404);
 
-  //         });
-  //     });
+          test("It should return 404 for no-such-comp", async function () {
+              const response = await request(app)
+                  .delete("/companies/blargh");
 
-  //     describe("DELETE /handle", function () {
+              expect(response.statusCode).toEqual(404);
+          });
+      });
 
-  //         test("It should delete company", async function () {
-  //             const response = await request(app)
-  //                 .delete("/companies/testHandle");
+  test("It should return a 500 error if the company handle does not exist", async function () {
+    const response = await request(app)
+      .post("/jobs")
+      .send({
+        "title": "newValue",
+        "salary": 200,
+        "equity": 0.4,
+        "company_handle": ""
+      });
+    expect(response.statusCode).toBe(500);
 
-  //             expect(response.body).toEqual({ "message": "Company deleted" });
-  //         });
-
-  //         test("It should return 404 for no-such-comp", async function () {
-  //             const response = await request(app)
-  //                 .delete("/companies/blargh");
-
-  //             expect(response.statusCode).toEqual(404);
-  //         });
-  //     });
-
-    test("It should return a 500 error if the company handle does not exist", async function () {
-      const response = await request(app)
-        .post("/jobs")
-        .send({
-          "title": "newValue",
-          "salary": 200,
-          "equity": 0.4,
-          "company_handle": ""
-        });
-        expect(response.statusCode).toBe(500);
-        
-    });
   });
+
 
 
   afterAll(async function () {
@@ -266,6 +239,4 @@ describe("routes for jobs", async function () {
     await db.end()
   })
 
-
 });
-

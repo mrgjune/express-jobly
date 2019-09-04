@@ -85,6 +85,15 @@ class Job {
    *
    */
 
+/** Update job data with `data`.
+   *
+   * This is a "partial update" --- it's fine if data doesn't contain
+   * all the fields; this only changes provided ones.
+   *
+   * Return data for changed job.
+   *
+   */
+
   static async update(id, data) {
     let { query, values } = sqlForPartialUpdate("jobs", data, "id", id);
 

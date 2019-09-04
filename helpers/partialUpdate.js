@@ -17,7 +17,6 @@
 function sqlForPartialUpdate(table, items, key, id) {
   // keep track of item indexes
   // store all the columns we want to update and associate with vals
-console.log("sfdjfkj")
   let idx = 1;
   let columns = [];
 
@@ -36,10 +35,8 @@ console.log("sfdjfkj")
   // build query
   let cols = columns.join(", ");
   let query = `UPDATE ${table} SET ${cols} WHERE ${key}=$${idx} RETURNING *`;
-  console.log(query,"QUEWRY")
   let values = Object.values(items);
   values.push(id);
-  console.log(values)
   return { query, values };
 }
 

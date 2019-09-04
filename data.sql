@@ -1,16 +1,7 @@
 
-<<<<<<< HEAD
-
-CREATE TABLE companies (
-    handle text PRIMARY KEY,
-    name text not null,
-    num_employees integer,
-    description text,
-    logo_url text
-=======
--- DROP DATABASE IF EXISTS "jobly";
--- CREATE DATABASE "jobly";
--- \c "jobly"
+DROP DATABASE IF EXISTS "jobly";
+CREATE DATABASE "jobly";
+\c "jobly"
 
 CREATE TABLE companies(
     handle TEXT PRIMARY KEY,
@@ -28,7 +19,6 @@ CREATE TABLE users(
     email TEXT,
     photo_url TEXT,
     is_admin BOOLEAN NOT NULL default FALSE
->>>>>>> refs/remotes/origin/master
 );
 
 CREATE TABLE jobs(
@@ -54,19 +44,23 @@ INSERT INTO companies (handle, name, num_employees, description, logo_url) VALUE
 
 
 INSERT INTO users (username, password, first_name, last_name, email, photo_url) VALUES
-('mcTestUsername', 'test1234', 'test', 'testLastName', 'test@test.com', 'http:google.com');
+('mcTestUsername', 'test1234', 'test', 'testLastName', 'test@test.com', 'http:google.com'),
+('maragreene', 'password1', 'mara', 'greene', 'mgreene@skidmore.edu', 'http:google.com');
+
+
   
 INSERT INTO jobs (title, salary, equity, company_handle) VALUES 
-('ceo', 1000000, 0.3, 'testHandle')
+('ceo', 1000000, 0.3, 'testHandle'),
+('boss',100000, 0.4,'apple');
 
 
 
 
--- Create test database with tables
+Create test database with tables
 
--- DROP DATABASE IF EXISTS "jobly-test";
--- CREATE DATABASE "jobly-test";
--- \c "jobly-test"
+DROP DATABASE IF EXISTS "jobly-test";
+CREATE DATABASE "jobly-test";
+\c "jobly-test"
 
 
 CREATE TABLE companies(
@@ -96,10 +90,3 @@ CREATE TABLE jobs(
     date_posted timestamp NOT NULL DEFAULT NOW()
 );
 
--- CREATE TABLE applications(
---     username TEXT NOT NULL REFERENCES users ON DELETE CASCADE,
---     job_id INTEGER  REFERENCES jobs ON DELETE CASCADE,
---     state TEXT,
---     created_at TIMESTAMP DEFAULT current_timestamp,
---     PRIMARY KEY(username, job_id)
--- );

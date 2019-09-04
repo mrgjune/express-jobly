@@ -25,24 +25,24 @@ describe("routes for companies", function () {
             description: "This is our test2",
             logo_url: "https://www.google.com/"
 
-          })
+        })
         const j1 = await Job.create({
             title: "engineer_test1",
             salary: "100",
             equity: 0.1,
             company_handle: "testHandle"
-          })
+        })
 
-        const j2 =  await Job.create({
+        const j2 = await Job.create({
             title: "artist_test2",
             salary: "10000",
             equity: 0.7,
             company_handle: "testHandle"
-          })
+        })
 
     });
 
-   
+
 
     describe("GET /:handle", function () {
 
@@ -52,7 +52,7 @@ describe("routes for companies", function () {
             expect(response.body.company.name).toEqual("testName");
             expect(response.body.company.jobs[0].job_title).toEqual("engineer_test1");
             expect(response.body.company.jobs[1].job_title).toEqual("artist_test2");
-           
+
         })
 
         test("It should return 404 for no-such-comp", async function () {
@@ -72,7 +72,7 @@ describe("routes for companies", function () {
                 "companies": [{
                     "handle": "testHandle",
                     "name": "testName"
-                },{
+                }, {
                     "handle": "testHandle2",
                     "name": "testName2"
                 }]
@@ -152,12 +152,10 @@ describe("routes for companies", function () {
     });
 
     describe("PATCH /:handle", function () {
-
         test("It should update company", async function () {
             const response = await request(app)
                 .patch("/companies/testHandle")
-                .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });
-
+                .send({ name: "testyPATCH", description: "NewDescrip" } );
             expect(response.body).toEqual(
                 {
                     "company": {
@@ -174,7 +172,7 @@ describe("routes for companies", function () {
         test("It should return 404 for no-such-comp", async function () {
             const response = await request(app)
                 .patch("/companies/blargh")
-                .send({ "items": { name: "testyPATCH", description: "NewDescrip" } });;
+                .send({ name: "testyPATCH" });
             expect(response.statusCode).toEqual(404);
 
         });

@@ -28,7 +28,6 @@ class User {
                 WHERE username = $1`,
             [username]
         )
-        console.log(result.rows[0])
         return result.rows[0];
     }
    /**update user info by username */

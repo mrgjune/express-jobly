@@ -14,7 +14,6 @@ router.post("/", async function (req, res, next) {
 
   try {
     const result = jsonschema.validate(req.body, postJobSchema)
-
     if (!result.valid) {
       let listOfErrors = result.errors.map(error => error.stack)
       throw new ExpressError(listOfErrors, 400);
@@ -72,33 +71,25 @@ router.get("/:id", async function (req, res, next) {
   }
 })
 
-/** PATCH/jobs/[id], update company routes by id, should return JSON of {job: jobData} */
-router.patch("/:id", async function (req, res, next) {
-  let id = req.params.id;
-  let items = req.body.items
+/** PATCH /[jobid]  {jobData} => {job: updatedJob} */
 
+router.patch('/:id', async function(req, res, next) {
   try {
-
-    let updateJob = sqlForPartialUpdate("jobs", items, "id", id)
-
-    const validateResult = jsonschema.validate(items, patchJobSchema)
-    if (!validateResult.valid) {
-
-      let listOfErrors = validateResult.errors.map(error => error.stack);
-      throw new ExpressError(listOfErrors, 400);
-
+    if ('id' in req.body) {
+      throw new ExpressError('You are not allowed to change the ID', 400);
     }
-    const result = await db.query(updateJob.query, updateJob.values)
-    if (result.rowCount !== 0) {
-      let job = result.rows[0]
-      return res.json({ job })
-    }
-    throw new ExpressError("Job Not Found", 404);
 
+    const validation = validate(req.body, jobUpdateSchema);
+    if (!validation.valid) {
+      throw new ExpressError(validation.errors.map(e => e.stack), 400);
+    }
+
+    const job = await Job.update(req.params.id, req.body);
+    return res.json({ job });
   } catch (err) {
-    return next(err)
+    return next(err);
   }
-})
+});
 
 /** DELETE/jobs/[id], return JSON of { message: "Job deleted" } */
 router.delete("/:id", async function (req, res, next) {

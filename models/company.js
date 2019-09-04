@@ -1,5 +1,6 @@
 const db = require("../db");
-
+const ExpressError = require("../helpers/ExpressError");
+const sqlForPartialUpdate = require("../helpers/partialUpdate");
 class Company {
     /**insert a company in companies database */
     static async create({ handle, name, num_employees, description, logo_url }) {
@@ -49,6 +50,32 @@ class Company {
         return result.rows[0];
     }
 
+    /** Update company data with `data`.
+   *
+   * This is a "partial update" --- it's fine if data doesn't contain
+   * all the fields; this only changes provided ones.
+   *
+   * Return data for changed company.
+   *
+   */
+
+  static async update(handle, data) {
+    let { query, values } = sqlForPartialUpdate(
+      "companies",
+      data,
+      "handle",
+      handle
+    );
+
+    const result = await db.query(query, values);
+    const company = result.rows[0];
+
+    if (!company) {
+      throw new ExpressError(`There exists no company '${handle}`, 404);
+    }
+
+    return company;
+  }
 
 
 

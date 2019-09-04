@@ -71,33 +71,25 @@ router.get("/:handle", async function (req, res, next) {
 })
 
 
-/** PATCH/companies/[id], update company routes by handle, should return JSON of {company: companyData} */
-router.patch("/:handle", async function (req, res, next) {
-  let handle = req.params.handle;
-  let items = req.body.items
+/** PATCH /[handle] {companyData} => {company: updatedCompany}  */
 
+router.patch('/:handle', async function(req, res, next) {
   try {
-
-    let updateCompany = sqlForPartialUpdate("companies", items, "handle", handle)
-
-    const validateResult = jsonschema.validate(items, patchCompanySchema)
-    if (!validateResult.valid) {
-
-      let listOfErrors = validateResult.errors.map(error => error.stack);
-      throw new ExpressError(listOfErrors, 400);
-
+    if ('handle' in req.body) {
+      throw new ExpressError('You are not allowed to change the handle.', 400);
     }
-    const result = await db.query(updateCompany.query, updateCompany.values)
-    if (result.rowCount !== 0) {
-      let company = result.rows[0]
-      return res.json({ company })
-    }
-    throw new ExpressError("Company Not Found", 404);
 
+    // const validation = validate(req.body, patchCompanySchema);
+    // if (!validation.valid) {
+    //   throw new ExpressError(validation.errors.map(e => e.stack), 400);
+    // }
+
+    const company = await Company.update(req.params.handle, req.body);
+    return res.json({ company });
   } catch (err) {
-    return next(err)
+    return next(err);
   }
-})
+});
 
 /** DELETE/companies/[handle], return JSON of {message: "Company deleted"} */
 router.delete("/:handle", async function (req, res, next) {
