@@ -39,7 +39,7 @@ class Job {
 
     return result.rows;
   }
-
+  /**get a job by its id */
   static async get(id) {
     let result = await db.query(
           `SELECT j.id AS job_id , 
